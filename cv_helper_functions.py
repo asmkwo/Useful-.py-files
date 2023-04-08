@@ -319,3 +319,14 @@ def original_vs_augmented_image(train_dataset, train_directory, sequential_data_
   plt.imshow(tf.squeeze(augmented_img)/255.) # normalization must be done after data augmentation
   plt.title(f"Augmented random image from class: {target_class}")
   plt.axis(False);
+
+def view_random_image_of_target_class (target_dir, target_class) :
+   target_folder = target_dir+ '/' + target_class
+
+   random_image = random.sample(os.listdir(target_folder),1)
+
+   img = mpimg.imread(target_folder + "/" + random_image[0])
+   plt.imshow(img)
+   plt.title(target_class)
+   plt.axis('off')
+   return img
