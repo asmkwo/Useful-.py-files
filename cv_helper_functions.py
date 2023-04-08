@@ -321,19 +321,19 @@ def original_vs_augmented_image(train_dataset, train_directory, sequential_data_
   plt.axis(False);
 
 def view_random_image_of_target_class(target_dir, target_class) :
-   """
+    """
     Displays random chosen image of the specified class
     :param target_dir: train directory path
     :param target_class: class of the image
     :return:
     """
-   target_folder = target_dir+ '/' + target_class
+    target_folder = target_dir+ '/' + target_class
 
-   random_image = random.sample(os.listdir(target_folder),1)
+    random_image = random.sample(os.listdir(target_folder),1)
 
-   img = mpimg.imread(target_folder + "/" + random_image[0])
-   plt.imshow(img)
-   plt.title(target_class)
-   plt.axis('off')
+    img = mpimg.imread(target_folder + "/" + random_image[0])
+    plt.imshow(img)
+    plt.title(target_class)
+    plt.axis('off')
 
-   return img
+    return img
