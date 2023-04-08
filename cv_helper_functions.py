@@ -320,7 +320,13 @@ def original_vs_augmented_image(train_dataset, train_directory, sequential_data_
   plt.title(f"Augmented random image from class: {target_class}")
   plt.axis(False);
 
-def view_random_image_of_target_class (target_dir, target_class) :
+def view_random_image_of_target_class(target_dir, target_class) :
+   """
+    Displays random chosen image of the specified class
+    :param target_dir: train directory path
+    :param target_class: class of the image
+    :return:
+    """
    target_folder = target_dir+ '/' + target_class
 
    random_image = random.sample(os.listdir(target_folder),1)
@@ -329,4 +335,5 @@ def view_random_image_of_target_class (target_dir, target_class) :
    plt.imshow(img)
    plt.title(target_class)
    plt.axis('off')
+
    return img
