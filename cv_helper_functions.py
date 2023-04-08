@@ -290,3 +290,32 @@ def calculate_results(y_true, y_pred):
                      "recall": model_recall,
                      "f1": model_f1}
     return model_results
+
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import os
+import random
+
+def original_vs_augmented_image(train_dataset, train_directory, sequential_data_augmentation):
+  """
+  Shows an original image next to its augmented version. Used to validate that data augmentation layer works properly and visualize its effects
+  Args:
+    train_dataset : Dataset or BatchDataset object
+    train_directory : the actual path where the train classes are stored
+    sequential_data_augmentation : the Sequential layer used for data augmentation
+  """
+  target_class = random.choice(train_dataset.class_names) # choose a random class
+  target_dir = train_directory + target_class # create the target directory
+  random_image = random.choice(os.listdir(target_dir)) # choose a random image from target directory
+  random_image_path = target_dir + "/" + random_image # create the choosen random image path
+  img = mpimg.imread(random_image_path) # read in the chosen target image
+  plt.imshow(img) # plot the target image
+  plt.axis(False);
+  plt.title(f"Original random image from class: {target_class}")
+
+  # Augment the image
+  augmented_img = data_augmentation(tf.expand_dims(img, axis=0)) # data augmentation model requires shape (None, height, width, 3)
+  plt.figure()
+  plt.imshow(tf.squeeze(augmented_img)/255.) # normalization must be done after data augmentation
+  plt.title(f"Augmented random image from class: {target_class}")
+  plt.axis(False);
