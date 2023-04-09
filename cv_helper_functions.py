@@ -1,7 +1,16 @@
 #Set of functions that help for neural networks training and analyzing
-
-
+import datetime
+import zipfile
+import os
+import random
+import numpy as np
 import tensorflow as tf
+import itertools
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+
 
 
 # Create a function to import an image and resize it to be able to be used with our model
@@ -30,10 +39,7 @@ def load_and_prep_image(filename, img_shape=224, scale=True):
 
 # Note: The following confusion matrix code is a remix of Scikit-Learn's
 # plot_confusion_matrix function - https://scikit-learn.org/stable/modules/generated/sklearn.metrics.plot_confusion_matrix.html
-import itertools
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.metrics import confusion_matrix
+
 
 
 # Our function needs a different name to sklearn's plot_confusion_matrix
@@ -120,7 +126,7 @@ def predict_and_plot(model, filename, class_names):
 
     # Make a prediction
     pred = model.predict(tf.expand_dims(img, axis=0))
-
+    pred_prob = model.predict(tf.expand_dims(img, axis=0))
     # Get the predicted class
     if len(pred[0]) > 1:  # check for multi-class
         pred_class = class_names[pred.argmax()]  # if more than one output, take the max
@@ -129,11 +135,8 @@ def predict_and_plot(model, filename, class_names):
 
     # Plot the image and predicted class
     plt.imshow(img)
-    plt.title(f"Prediction: {pred_class}")
+    plt.title(f"Prediction: {pred_class} with probability {pred_prob.max():.2f}")
     plt.axis(False);
-
-
-import datetime
 
 
 def create_tensorboard_callback(dir_name, experiment_name):
@@ -154,8 +157,6 @@ def create_tensorboard_callback(dir_name, experiment_name):
 
 
 # Plot the validation and training data separately
-import matplotlib.pyplot as plt
-
 
 def plot_loss_curves(history):
     """
@@ -234,8 +235,6 @@ def compare_historys(original_history, new_history, initial_epochs=5):
 
 # Create function to unzip a zipfile into current working directory
 # (since we're going to be downloading and unzipping a few files)
-import zipfile
-
 
 def unzip_data(filename):
     """
@@ -250,7 +249,7 @@ def unzip_data(filename):
 
 # Walk through an image classification directory and find out how many files (images)
 # are in each subdirectory.
-import os
+
 
 
 def walk_through_dir(dir_path):
@@ -270,9 +269,6 @@ def walk_through_dir(dir_path):
 
 
 # Function to evaluate: accuracy, precision, recall, f1-score
-from sklearn.metrics import accuracy_score, precision_recall_fscore_support
-
-
 def calculate_results(y_true, y_pred):
     """
     Calculates model accuracy, precision, recall and f1 score of a binary classification model.
@@ -291,10 +287,10 @@ def calculate_results(y_true, y_pred):
                      "f1": model_f1}
     return model_results
 
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-import os
-import random
+def hello():
+    print("Hello world")
+
+
 
 def original_vs_augmented_image(train_dataset, train_directory, sequential_data_augmentation):
     """
@@ -320,6 +316,7 @@ def original_vs_augmented_image(train_dataset, train_directory, sequential_data_
     plt.title(f"Augmented random image from class: {target_class}")
     plt.axis(False);
 
+
 def view_random_image_of_target_class(target_dir, target_class):
     # can't seem to import this function
     """
@@ -328,13 +325,12 @@ def view_random_image_of_target_class(target_dir, target_class):
     target_dir: train directory path
     target_class: class of the image
     """
-    # target_folder = target_dir+ '/' + target_class
-    #
-    # random_image = random.sample(os.listdir(target_folder),1)
-    #
-    # img = mpimg.imread(target_folder + "/" + random_image[0])
-    # plt.imshow(img)
-    # plt.title(target_class)
-    # plt.axis('off')
+    target_folder = target_dir+ '/' + target_class
 
-    return "hello"
+    random_image = random.sample(os.listdir(target_folder),1)
+
+    img = mpimg.imread(target_folder + "/" + random_image[0])
+    plt.imshow(img)
+    plt.title(target_class)
+    plt.axis('off')
+
